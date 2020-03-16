@@ -17,18 +17,18 @@ public class DelayFilter implements Filter
 
   public double[] computeOneStep(double[] input) throws FilterException
   {
-
+    if(input.length != 1)
+      System.out.println("yo");
+      
     double[] output = new double [1];
     sQueue.put(Double.valueOf(input[0]));
     if(delay > 0)
     {
-      output[0] = 1;
+      output[0] = 0;
       delay--;
-      return output;
     }
-
-    output[0] = (Double)sQueue.get();
-
+    else
+      output[0] = (Double)sQueue.get();
 
     return output;
   }

@@ -16,7 +16,8 @@ public class Example
         try
         {
             // TODO: instanciate myFilter
-            Filter myFilter = new GainFilter(0.2);
+            //Filter myFilter = new GainFilter(0.2);
+            Filter myFilter = new DelayFilter(1);
 
             TestAudioFilter.applyFilter(myFilter, "Source.wav", "Filtered.wav");
         }

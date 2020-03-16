@@ -16,9 +16,22 @@ public class Example
         try
         {
             // TODO: instanciate myFilter
-            Filter myFilter = new GainFilter(0.7);
+            Filter myFilter = new DelayFilter(44100*10);
             //Filter myFilter = new DelayFilter(44100 *5);
         //    Filter myFilter = new DummyFilter(44100 * 3);
+
+        //Filter add = new AddFilter();
+        //Filter delay = new DelayFilter(10^4);
+        //Filter gain = new GainFilter(0.6);
+        //Filter myFilter = new CompositeFilter(1,1);
+        //myFilter.addBlock(add);
+        //myFilter.addBlock(delay);
+        //myFilter.addBlock(gain);
+        //myFilter.connectInputToBlock(,add,);
+        //myFilter.connectBlockToOutput(add,,);
+        //myFilter.connectBlockToBlock(add, , delay, );
+        //myFilter.connectBlockToBlock(delay, , gain, );
+        //myFilter.connectBlockToBlock(gain, , add, );
 
             TestAudioFilter.applyFilter(myFilter, "Source.wav", "Filtered.wav");
         }

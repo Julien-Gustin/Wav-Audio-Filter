@@ -20,6 +20,5 @@ public class GainFilter implements Filter
   }
 
   public void reset(){
-    gain = 0;
   }
 }

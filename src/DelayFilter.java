@@ -19,7 +19,7 @@ public class DelayFilter implements Filter
   {
     if(input.length != 1)
       System.out.println("yo");
-      
+
     double[] output = new double [1];
     sQueue.put(Double.valueOf(input[0]));
     if(delay > 0)
@@ -34,9 +34,7 @@ public class DelayFilter implements Filter
   }
 
   public void reset(){
-    delay = 0;
     sQueue.reset();
-    // sQueue = null;
-
+    sQueue = null;
   }
 }

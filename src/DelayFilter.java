@@ -4,42 +4,39 @@ public class DelayFilter implements Filter
 {
 
   private int delay;
+  private Queue sQueue;
 
-  private int nbInputs;
-  private int nbOutputs;
-  private int reminder;
-
-  public int nbInputs(){return nbInputs;}
-  public int nbOutputs(){return nbOutputs;}
+  public int nbInputs(){return 1;}
+  public int nbOutputs(){return 1;}
 
 
   public DelayFilter(int delay){
     this.delay = delay;
-    nbInputs = 0;
-    nbOutputs = 0;
-    reminder = 0;
+    sQueue = new Queue();
   }
 
-  private void SetnbInputs(int nbInputs){this.nbInputs = nbInputs;}
-  private void SetnbOutputs(int nbOutputs){this.nbOutputs = nbOutputs;}
+  public double[] computeOneStep(double[] input) throws FilterException
+  {
+
+    double[] output = new double [1];
+    sQueue.put(Double.valueOf(input[0]));
+    if(delay > 0)
+    {
+      output[0] = 1;
+      delay--;
+      return output;
+    }
+
+    output[0] = (Double)sQueue.get();
 
 
-  public double[] computeOneStep(double[] input) throws FilterException{
-    SetnbInputs(input.length);
-
-    double[] output = new double [nbInputs + delay];
-    int i = 0;
-
-    System.out.println(nbInputs);
-
-
-    SetnbOutputs(delay+nbInputs);
     return output;
   }
 
   public void reset(){
     delay = 0;
-    nbInputs = 0;
-    nbOutputs = 0;
+    sQueue.reset();
+    // sQueue = null;
+
   }
 }

@@ -5,40 +5,21 @@ public class GainFilter implements Filter
 
   private double gain;
 
-  private int nbInputs;
-  private int nbOutputs;
+  public int nbInputs(){return 1;}
+  public int nbOutputs(){return 1;}
 
-  public int nbInputs(){return nbInputs;}
-  public int nbOutputs(){return nbOutputs;}
+  public GainFilter(double gain){this.gain = gain;}
 
+  public double[] computeOneStep(double[] input) throws FilterException
+  {
+    double[] output = new double [1];
 
-  public GainFilter(double gain){
-    this.gain = gain;
-    nbInputs = 0;
-    nbOutputs = 0;
-  }
+    output[0] = input[0]*gain;
 
-  private void SetnbInputs(int nbInputs){this.nbInputs = nbInputs;}
-  private void SetnbOutputs(int nbOutputs){this.nbOutputs = nbOutputs;}
-
-
-  public double[] computeOneStep(double[] input) throws FilterException{
-    SetnbInputs(input.length);
-
-    double[] output = new double [nbInputs];
-    for(int i = 0; i < nbInputs; i++){
-      //if(input[i] < 0) throw new FilterException("Wrong input");
-      output[i] = input[i]*gain;
-      //if(output[i] < 0) throw new FilterException("Error in output computation");
-    }
-
-    SetnbOutputs(nbInputs);
     return output;
   }
 
   public void reset(){
     gain = 0;
-    nbInputs = 0;
-    nbOutputs = 0;
   }
 }

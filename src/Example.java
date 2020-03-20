@@ -17,23 +17,25 @@ public class Example
         {
             // TODO: instanciate myFilter
             //Filter myFilter = new DelayFilter(44100*10);
-            Filter myFilter = new GainFilter(0.3);
-        //    Filter myFilter = new DummyFilter(44100 * 3);
+            Filter mult1 = new GainFilter(0.5);
+            Filter mult2 = new GainFilter(0.5);
+            Filter mult3 = new GainFilter(0.1);
 
-        //Filter add = new AddFilter();
-        //Filter delay = new DelayFilter(10^4);
-        //Filter gain = new GainFilter(0.6);
-        //Filter myFilter = new CompositeFilter(1,1);
-        //myFilter.addBlock(add);
-        //myFilter.addBlock(delay);
-        //myFilter.addBlock(gain);
-        //myFilter.connectInputToBlock(,add,);
-        //myFilter.connectBlockToOutput(add,,);
-        //myFilter.connectBlockToBlock(add, , delay, );
-        //myFilter.connectBlockToBlock(delay, , gain, );
-        //myFilter.connectBlockToBlock(gain, , add, );
+            CompositeFilter audioFilter = new CompositeFilter(1, 1);
+            audioFilter.addBlock(mult1);
+            audioFilter.addBlock(mult2);
+            audioFilter.addBlock(mult3);
 
-            TestAudioFilter.applyFilter(myFilter, "Source.wav", "Filtered.wav");
+            audioFilter.connectInputToBlock(0, mult1, 0);
+            audioFilter.connectBlockToBlock(mult1, 0, mult2, 0);
+            audioFilter.connectBlockToOutput(mult2, 0, 0);
+
+            audioFilter.connectInputToBlock(0, mult2, 0);
+            audioFilter.connectBlockToBlock(mult2, 0, mult3, 0);
+            audioFilter.connectBlockToOutput(mult3, 0, 0);
+
+
+            TestAudioFilter.applyFilter(audioFilter, "Source.wav", "Filtered3.wav");
         }
         catch(Exception e)
         {

@@ -1,94 +1,70 @@
 /*
  * INFO0062 - Object-Oriented Programming
- * Dummy filter to test the audio.jar library
+ * Example of filter created with a CompositeFilter class
  *
- * Example of class implementing the Filter interface (see statement of the project), provided as
- * a tool to test the audio.jar library before starting the project.
+ * This short class demonstrates an example of filter created with the CompositeFilter as
+ * described by the statement.
  *
- * This filter is designed to let samples pass through for a given duration, before cutting them
- * for the same duration (by replacing all of them with 0's), then let them pass again, etc.
+ * The filter here consists of two GainFilter (with real value 0.1) connected to the input which
+ * both feeds an AdditionFilter. When applied to a WAV file, this construction produces the same
+ * sound as the original WAV file but with a lower volume.
  *
- * In practice, if you use duration = 44100 * 3, the WAV file after filtering will contain 3
- * seconds of the initial file, then 3 seconds of nothing, then 3 seconds of the original content,
- * and so on and so forth.
- *
- * In the Example.java from project_basis, you can instantiate a MyFilter object with this class
- * with either of the next instructions (duration of cutoff = 3 seconds):
- * -"Filter myFilter = new DummyFilter(44100 * 3);"
- * -"DummyFilter myFilter = new DummyFilter(44100 * 3);"
+ * Regardless of how you designed your project, your final library MUST compile while using this
+ * file as a main program. Compilation errors would mean that:
+ * -classes described in the statement (i.e., AdditionFilter, GainFilter, DelayFilter and
+ *  CompositeFilter) aren't correctly named,
+ * -the interface of the CompositeFilter class isn't correctly named or does not use the same
+ *  parameters as described in the statement.
+ * However, the way you handle exceptions (if used) is entirely free.
  *
  * @author: J.-F. Grailet (ULiege)
  */
 
-import be.uliege.montefiore.oop.audio.Filter; // Also import FilterException if you're using it
+import be.uliege.montefiore.oop.audio.*;
 
-public class DummyFilter implements Filter
+public class DummyFilter
 {
-   private int duration, count;
-   private boolean cutting; // True if we are "cutting" the sound (i.e., no sample can pass)
+    public static void main(String[] args)
+    {
+        try
+        {
+            // Creates the CompositeFilter object, with one input and one output
+            CompositeFilter audioFilter = new CompositeFilter(1, 1);
 
-   /*
-    * Constructor. Duration is expressed in samples.
-    *
-    * N.B.: for the sake of simplicity, it is assumed the user will provide a duration > 0.
-    */
+            // Creates the basic blocks
+            Filter delay = new DelayFilter(10000);
+            Filter mult = new GainFilter(0.6);
+            Filter add = new AdditionFilter();
 
-   public DummyFilter(int duration)
-   {
-      this.duration = duration;
-      count = 0;
-      cutting = false;
-   }
+            // Adds them to the CompositeFilter
+            audioFilter.addBlock(mult);
+            audioFilter.addBlock(delay);
+            audioFilter.addBlock(add);
 
-   /*
-    * Implementation of the nbInputs() and nbOutputs() methods (trivial in this case).
-    */
+            // Connects the blocks together
+            // audioFilter.connectInputToBlock(0, mult1, 0);
+            // audioFilter.connectInputToBlock(0, mult2, 0);
+            // audioFilter.connectBlockToBlock(mult1, 0, add, 0);
+            // audioFilter.connectBlockToBlock(mult2, 0, add, 1);
+            // audioFilter.connectBlockToOutput(add, 0, 0);
+            // audioFilter.connectInputToBlock(0, mult1, 0);
+            //audioFilter.connectBlockToBlock(mult1, 0, mult2, 0);
+            //audioFilter.connectBlockToBlock(mult2, 0, mult3, 0);
+            // audioFilter.connectBlockToOutput(mult1, 0, 0);
 
-   public int nbInputs()
-   {
-      return 1;
-   }
+            audioFilter.connectInputToBlock(0, add, 0);
+            audioFilter.connectInputToBlock(0, delay, 0);
+            audioFilter.connectBlockToBlock(delay, 0, mult, 0);
+            audioFilter.connectBlockToBlock(mult, 0, add, 1);
 
-   public int nbOutputs()
-   {
-      return 1;
-   }
+            audioFilter.connectBlockToOutput(add, 0, 0);
 
-   /*
-    * Computes one step of the filter, i.e.:
-    * -increments the counter,
-    * -if equal to the duration, resets it and flips the "cutting" boolean,
-    * -creates the output array and copies the input in it as long as "cutting" is false
-    *  (otherwise, the output will just contain the "0" value).
-    *
-    * N.B.: in a complete project, the method needs to ensure the input array is properly sized.
-    */
-
-   public double[] computeOneStep(double[] input)
-   {
-      count++;
-      if(count == duration)
-      {
-         count = 0;
-         cutting = !cutting;
-      }
-
-      double[] output = new double[1];
-      output[0] = 0;
-      if(!cutting)
-         output[0] = input[0];
-      return output;
-   }
-
-   /*
-    * reset() method as specified in the Filter interface. For fun, you can comment the next
-    * lines, use a duration that is not a multiple of 44100 (sampling frequency) and see what
-    * happens.
-    */
-
-   public void reset()
-   {
-      count = 0;
-      cutting = false;
-   }
+            // Applies the filter
+            TestAudioFilter.applyFilter(audioFilter, "Source2.wav", "Filtered.wav");
+        }
+        catch(Exception e)
+        {
+            System.err.println("Error: " + e.getMessage());
+        }
+    }
 }

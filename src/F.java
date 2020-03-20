@@ -2,16 +2,30 @@ import be.uliege.montefiore.oop.audio.*;
 
 public class F
 {
+  public int linkIn;
+  public int linkOut;
 
-  public int i1, o1, i2, o2;
-  public Filter next; // changer en private
+  public F[] prec;
+  public CompositeFilter actuel;
 
-  public F()
+  public int input; // input = {0, 1} if not => no input
+  public int output; // output = {0, 1} if not => no output
+
+  public int in; // reserved for the input
+  public int out; // reserved for the outpt
+
+
+  public F(CompositeFilter cf)
   {
-    next = null;
+    prec = new F [2];
+    actuel = cf;
+    prec[0] = null;
+    prec[1] = null;
+    input = -1;
+    output = -1;
+    in = -1;
+    out = -1;
+    linkIn = -1;
+    linkOut = -1;
   }
-
-
-
-
 }

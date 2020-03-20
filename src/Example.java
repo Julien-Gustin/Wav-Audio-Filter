@@ -16,7 +16,7 @@ public class Example
         try
         {
             // TODO: instanciate myFilter
-            //Filter myFilter = new DelayFilter(44100*10);
+            Filter myFilter = new DelayFilter(44100*5);
             Filter mult1 = new GainFilter(0.5);
             Filter mult2 = new GainFilter(0.5);
             Filter mult3 = new GainFilter(0.1);
@@ -25,6 +25,7 @@ public class Example
             audioFilter.addBlock(mult1);
             audioFilter.addBlock(mult2);
             audioFilter.addBlock(mult3);
+            audioFilter.addBlock(myFilter);
 
             audioFilter.connectInputToBlock(0, mult1, 0);
             audioFilter.connectBlockToBlock(mult1, 0, mult2, 0);
@@ -33,6 +34,12 @@ public class Example
             audioFilter.connectInputToBlock(0, mult2, 0);
             audioFilter.connectBlockToBlock(mult2, 0, mult3, 0);
             audioFilter.connectBlockToOutput(mult3, 0, 0);
+
+            audioFilter.connectInputToBlock(0, mult3, 0);
+            audioFilter.connectBlockToBlock(mult3, 0, myFilter, 0);
+            audioFilter.connectBlockToOutput(myFilter, 0, 0);
+
+
 
 
             TestAudioFilter.applyFilter(audioFilter, "Source.wav", "Filtered3.wav");

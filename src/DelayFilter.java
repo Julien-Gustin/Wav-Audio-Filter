@@ -49,5 +49,6 @@ public class DelayFilter implements Filter
 
   public void reset(){
     compt = delay;
+    sQueue.reset();
   }
 }

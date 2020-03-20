@@ -77,6 +77,11 @@ public class CompositeFilter implements Filter
   }
 
   public void reset(){
-
+    Filter it = firstFilter;
+    while(it != null)
+    {
+      it.reset();
+      it = hash.get(it).next;
+    }
   }
 }

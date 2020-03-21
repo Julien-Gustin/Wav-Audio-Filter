@@ -16,35 +16,42 @@ public class Example
         try
         {
             // TODO: instanciate myFilter
-            Filter myFilter = new DelayFilter(44100*5);
-            Filter mult1 = new GainFilter(0.5);
-            Filter mult2 = new GainFilter(0.5);
-            Filter mult3 = new GainFilter(0.1);
+            Filter mult2 = new DelayFilter(44100*5);
+            Filter mult1 = new GainFilter(0.1);
+            //Filter mult2 = new GainFilter(0.5);
+            Filter mult3 = new GainFilter(0.5);
 
             Filter add = new AdditionFilter();
 
-            // CompositeFilter audioFilter = new CompositeFilter(1, 1);
-            // audioFilter.addBlock(mult1);
-            // audioFilter.addBlock(mult2);
-            // audioFilter.addBlock(mult3);
-            // audioFilter.addBlock(myFilter);
-            //
-            // audioFilter.connectInputToBlock(0, mult1, 0);
-            // audioFilter.connectBlockToBlock(mult1, 0, mult2, 0);
-            // audioFilter.connectBlockToOutput(mult2, 0, 0);
-            //
-            // audioFilter.connectInputToBlock(0, mult2, 0);
-            // audioFilter.connectBlockToBlock(mult2, 0, mult3, 0);
-            // audioFilter.connectBlockToOutput(mult3, 0, 0);
-            //
-            // audioFilter.connectInputToBlock(0, mult3, 0);
-            // audioFilter.connectBlockToBlock(mult3, 0, myFilter, 0);
-            // audioFilter.connectBlockToOutput(myFilter, 0, 0);
+            CompositeFilter audioFilter = new CompositeFilter(1, 1);
+//             audioFilter.addBlock(mult1);
+//             audioFilter.addBlock(mult2);
+//             audioFilter.addBlock(mult3);
+//             audioFilter.addBlock(myFilter);
+//
+//             audioFilter.connectInputToBlock(0, mult1, 0);
+//             audioFilter.connectBlockToBlock(mult1, 0, mult2, 0);
+// ;
+//
+//             audioFilter.connectBlockToBlock(mult2, 0, mult3, 0);
+//
+//             audioFilter.connectBlockToBlock(mult3, 0, myFilter, 0);
+//             audioFilter.connectBlockToOutput(myFilter, 0, 0);
+
+            audioFilter.addBlock(mult1);
+            audioFilter.addBlock(mult2);
+            audioFilter.addBlock(add);
+
+            audioFilter.connectInputToBlock(0, mult1, 0);
+            audioFilter.connectInputToBlock(0, mult2, 0);
+            audioFilter.connectBlockToBlock(mult1, 0, add, 0);
+            audioFilter.connectBlockToBlock(mult2, 0, add, 1);
+            audioFilter.connectBlockToOutput(add, 0, 0);
 
 
 
 
-            TestAudioFilter.applyFilter(add, "Source.wav", "Filtered3.wav");
+            TestAudioFilter.applyFilter(audioFilter, "Source2.wav", "Filtered.wav");
         }
         catch(Exception e)
         {

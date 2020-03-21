@@ -9,7 +9,10 @@ public class AdditionFilter implements Filter
   public AdditionFilter(){}
 
   public double[] computeOneStep(double[] input) throws FilterException{
-    double[] output = new double [1];
+    if (input.length != 2)
+      throw new FilterException ("Wrong input length. ");
+
+    double[] output = new double[1];
     output[0] = input[1]+input[0];
     return output;
   }

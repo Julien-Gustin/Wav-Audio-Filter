@@ -11,6 +11,8 @@ public class GraphNode
   private int inputs;
   private int outputs;
 
+  private int flag;
+
   public Filter filter;
 
   public GraphNode[] in;
@@ -25,6 +27,8 @@ public class GraphNode
     out = new GraphNode[outputs];
 
     this.filter = filter;
+
+    flag = 0;
 
     compositeInput = -1;
     compositeOutput = -1;
@@ -42,11 +46,14 @@ public class GraphNode
       this.compositeInput = compositeNum;
       this.compositeOutput = -1;
       out = new GraphNode[1];
+      inputs = 1;
+      outputs = 1;
     }
     else{
       this.compositeOutput = compositeNum;
       this.compositeInput = -1;
       inputs = 1;
+      outputs = 1;
       in = new GraphNode[1];
     }
   }
@@ -69,6 +76,17 @@ public class GraphNode
   {
     if(compositeInput != -1)
       return input[linko];
+
+      if(filter instanceof DelayFilter){
+        if(flag == 0){
+          flag = 1;
+        }
+        if(flag ==1){
+          flag = 0;
+          DelayFilter delay = (DelayFilter) filter;
+          return delay.getOutput()[linko];
+        }
+      }
 
     double[] inputArray = new double[inputs];
     for(int i = 0; i < inputs; i++){

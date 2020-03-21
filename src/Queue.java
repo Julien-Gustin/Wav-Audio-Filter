@@ -41,6 +41,16 @@ public class Queue
     return h.getData();
   }
 
+  public Object view()
+  {
+    if(head == null)
+      return null;
+
+    Node h = head;
+
+    return h.getData();
+  }
+
   public int size()
   {
     return size;

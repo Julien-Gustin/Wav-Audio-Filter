@@ -34,7 +34,7 @@ public class ReverbFilter
             // Creates the basic blocks
             Filter delay = new DelayFilter(1323);
             Filter multP = new GainFilter(0.5);
-            Filter multN = new GainFilter(-0.5);
+            Filter multN = new GainFilter(0.5);
             Filter add1 = new AdditionFilter();
             Filter add2 = new AdditionFilter();
 

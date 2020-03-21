@@ -32,6 +32,7 @@ public class DelayFilter implements Filter
    */
   public double[] computeOneStep(double[] input) throws FilterException
   {
+
     if(needsInput==1)
       throw new FilterException ("No previous input.");
 
@@ -71,23 +72,11 @@ public class DelayFilter implements Filter
       compt--;
     }
     else
-      output[0] = (Double)sQueue.get();
+      output[0] = (Double)sQueue.view();
 
-    needsInput = 1;
     return output;
   }
 
-  public void giveInput(double[] input) throws FilterException
-  {
-    if(needsInput==0)
-      throw new FilterException ("No need of new input.");
-
-    if (input.length != 1)
-      throw new FilterException ("Wrong input length. ");
-
-    sQueue.put(Double.valueOf(input[0]));
-    needsInput = 0;
-  }
 
   public void reset(){
     compt = delay;

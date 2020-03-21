@@ -77,7 +77,7 @@ public class DelayFilter implements Filter
     return output;
   }
 
-  public void giveInput() throws FilterException
+  public void giveInput(double[] input) throws FilterException
   {
     if(needsInput==0)
       throw new FilterException ("No need of new input.");

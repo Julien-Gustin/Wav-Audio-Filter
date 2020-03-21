@@ -7,9 +7,9 @@ public class CompositeFilter implements Filter
 
   private int nbInputs;
   private int nbOutputs;
-  private Hashtable<Filter, F> hash; //
+  private Hashtable<Filter, GraphNode> hash; //
 
-  private Filter filter;
+  private GraphNode[] outputs;
 
   public int nbInputs(){return nbInputs;}
   public int nbOutputs(){return nbOutputs;}
@@ -18,108 +18,87 @@ public class CompositeFilter implements Filter
   {
     nbInputs = inputs;
     nbOutputs = outputs;
-    hash = new Hashtable<Filter, F>();
+    hash = new Hashtable<Filter, GraphNode>();
 
-    filter = null;
-  }
-
-  public CompositeFilter(int inputs, int outputs, Hashtable<Filter, F> hash, Filter filter)
-  {
-    nbInputs = inputs;
-    nbOutputs = outputs;
-    this.hash = hash;
-    this.filter = filter;
+    this.outputs = new GraphNode[outputs];
+    for(int i = 0; i < outputs; i++){
+      this.outputs[i] = null;
+    }
   }
 
   public double[] computeOneStep(double[] input) throws FilterException
   {
-    double[] outputs = new double [2];
-    double[] output = new double [1];
-    F tmp = hash.get(filter);
-    int check = 0;
-    int link = -1;
+    double[] output = new double[nbOutputs];
+    double[] temp = new double[nbOutputs];
+    int index = 0;
 
-    if(tmp.input != -1)
-    {
-      outputs[tmp.in] = input[tmp.input];
-      check++;
+    for(int i = 0; i < nbOutputs; i++){
+      temp = outputs[i].getNodeOutput(input);//Gives the corresponding output.
+      //System.out.println(outputs[i].nbOutputs());
+      for(int j = 0; j<outputs[i].nbOutputs(); j++){
+        output[index]=temp[j];
+        index++;
+        //System.out.println(Arrays.toString(output));
+      }
     }
 
-    if(tmp.prec[0] != null)
-    {
-      link = tmp.prec[0].linkIn;
-      outputs[link] = tmp.prec[0].actuel.computeOneStep(input)[tmp.prec[0].linkOut];
-      check++;
-    }
-
-    if(tmp.prec[1] != null)
-    {
-      link = tmp.prec[1].linkIn;
-      outputs[link] = tmp.prec[1].actuel.computeOneStep(input)[tmp.prec[1].linkOut];
-      check++;
-    }
-
-    if(check == 2){
-      output = filter.computeOneStep(outputs); // verif output 2 de blockToClock
-}
-    else if(check == 1 && link == -1)
-    {
-      output[0] = outputs[tmp.in];
-      output = filter.computeOneStep(output);
-    }
-
-    else if(check == 1)
-    {
-      output[0] = outputs[link];
-      output = filter.computeOneStep(output);
-    }
     return output;
   }
 
   public void addBlock(Filter f)
   {
-    CompositeFilter newCF = new CompositeFilter(f.nbInputs(), f.nbOutputs(), hash, f);
-    F data = new F(newCF);
+    GraphNode data = new GraphNode(f);
     hash.put(f, data);
   }
 
-  public void connectBlockToBlock(Filter f1, int o1, Filter f2, int i2)
+  public void connectBlockToBlock(Filter f1, int o1, Filter f2, int i2) throws FilterException
   {
-    F tmp = hash.get(f2);
+    if (o1 >= f1.nbOutputs())
+      throw new FilterException("Wrong output for f1. ");
+    if (i2 >= f2.nbInputs())
+      throw new FilterException("Wrong input for f2. ");
 
-    tmp.prec[i2] = hash.get(f1);
-    //if(tmp.prec[i2] != null)
-      //ERROR
-    tmp.prec[i2].linkOut = o1;
-    tmp.prec[i2].linkIn = i2;
+    GraphNode node1 = hash.get(f1);
+    GraphNode node2 = hash.get(f2);
+
+    node1.connectOutput(o1, node2);
+    node2.connectInput(i2, node1);
 
   }
 
-  public void connectBlockToOutput(Filter f1, int o1, int o2)
+  public void connectBlockToOutput(Filter f1, int o1, int o2) throws FilterException
   {
-    F tmp = hash.get(f1);
+    if (o1 >= f1.nbOutputs())
+      throw new FilterException("Wrong output for f1. ");
+    if (o2 >= this.nbInputs())
+      throw new FilterException("Wrong input for the composite filter. ");
 
-    tmp.output = o2;
-    tmp.out = o1;
-    filter = f1;
+    if (outputs[o2] != null) // fefe doit verif ceci
+      throw new FilterException("Output already taken. ");
+
+    GraphNode node = hash.get(f1);
+    GraphNode out = new GraphNode(1, o2);
+    outputs[o2] = out;
+    node.connectOutput(o1, out);
+    out.connectInput(o2, node);
+
   }
 
-  public void connectInputToBlock(int i1, Filter f2, int i2)
+  public void connectInputToBlock(int i1, Filter f2, int i2) throws FilterException
   {
-    F tmp = hash.get(f2);
+    if (i1 >= nbInputs)
+      throw new FilterException("Wrong output for the composite filter. ");
+    if (i2 >= f2.nbInputs())
+      throw new FilterException("Wrong input for f2. ");
 
-    tmp.input = i1;
-    tmp.in = i2;
+
+    GraphNode node = hash.get(f2);
+    GraphNode in = new GraphNode(0, i1);
+    in.connectOutput(i1, node);
+    node.connectInput(i2, in);
   }
 
   public void reset(){
 
-    if(hash.get(filter).prec[0] != null)
-      hash.get(filter).prec[0].actuel.reset();
-
-    if(hash.get(filter).prec[1] != null)
-      hash.get(filter).prec[1].actuel.reset();
-
-    filter.reset();
   }
 }

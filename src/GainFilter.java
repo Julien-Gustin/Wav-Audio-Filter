@@ -8,16 +8,20 @@ public class GainFilter implements Filter
   public int nbInputs(){return 1;}
   public int nbOutputs(){return 1;}
 
-  /*
+  /**
    * Constructor. gain is expressed as a multiplicator
    *
-   * gain should be > 0
+   * @param gain
    */
   public GainFilter(double gain){this.gain = gain;}
 
-  /*
+  /**
    * Computes one step of the filter, i.e.:
    * creates output array which contain input[0] * gain
+   *
+   * @param input
+   *
+   * @return the piece of sample gained
    */
   public double[] computeOneStep(double[] input) throws FilterException
   {

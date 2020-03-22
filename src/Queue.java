@@ -1,3 +1,4 @@
+// a simle Queue classes
 public class Queue
 {
   private Node head;

@@ -32,7 +32,7 @@ public class EchoFilter
             CompositeFilter audioFilter = new CompositeFilter(1, 1);
 
             // Creates the basic blocks
-            Filter delay = new DelayFilter(10000);
+            Filter delay = new DelayFilter(22050);
             Filter mult = new GainFilter(0.6);
             Filter add = new AdditionFilter();
 
@@ -50,7 +50,7 @@ public class EchoFilter
             audioFilter.connectBlockToOutput(add, 0, 0);
 
             // Applies the filter
-            TestAudioFilter.applyFilter(audioFilter, "Source2.wav", "Filtered.wav");
+            TestAudioFilter.applyFilter(audioFilter, "Source2.wav", "Echo.wav");
         }
         catch(Exception e)
         {

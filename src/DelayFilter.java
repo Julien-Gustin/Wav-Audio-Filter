@@ -4,19 +4,17 @@ public class DelayFilter implements Filter
 {
 
   private int delay;
-  private Queue sQueue;
-  private int compt;
+  private Queue sQueue; // sQueue is a queue which contains the 'delay' sample before the current one of the input
+  private int compt; //compt take the value of delay and decrease at each calli
   private int needsInput;
 
   public int nbInputs(){return 1;}
   public int nbOutputs(){return 1;}
 
-  /*
+  /**
    * Constructor. delay is expressed in samples.
    *
-   * delay should be > 0
-   * compt take the value of delay
-   * sQueue is a queue which contains the 'delay' sample before the current one of the input
+   * @param delay should be > 0
    */
   public DelayFilter(int delay){
     this.delay = delay;
@@ -25,15 +23,15 @@ public class DelayFilter implements Filter
     needsInput = 0;
   }
 
-  /*
+  /**
    * Computes one step of the filter, i.e.:
    * creates output array which if delay is smaller than 0, contain 0
    * else the output[0] take the value of the head of the queue which is the 'smaller'th before the current one of the input
+   *
+   * @param input is the sample
    */
   public double[] computeOneStep(double[] input) throws FilterException
   {
-
-
     if(needsInput == 1)
       throw new FilterException ("No previous input.");
 
@@ -57,6 +55,7 @@ public class DelayFilter implements Filter
     return output;
   }
 
+  // TODO: document
   public double[] viewOutput() throws FilterException
   {
 
@@ -78,6 +77,9 @@ public class DelayFilter implements Filter
     return output;
   }
 
+  /**
+  * Reset the filter
+  */
   public void reset(){
     compt = delay;
     sQueue.reset();

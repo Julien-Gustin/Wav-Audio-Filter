@@ -89,12 +89,18 @@ public class CompositeFilter implements Filter
     if (i2 >= f2.nbInputs())
       throw new FilterException("Wrong input for f2. ");
 
-    //TODO : exceptions for blocks that are not added
-    GraphNode node1 = hash.get(f1);
-    GraphNode node2 = hash.get(f2);
+    try
+    {
+      GraphNode node1 = hash.get(f1);
+      GraphNode node2 = hash.get(f2);
 
-    node1.connectOutput(o1, node2);
-    node2.connectInput(i2, node1);
+      node1.connectOutput(o1, node2);
+      node2.connectInput(i2, node1);
+    }
+    catch(Exception e)
+    {
+      throw new FilterException("Filter used has not been added before. ");
+    }
   }
 
   /**
@@ -113,8 +119,15 @@ public class CompositeFilter implements Filter
     if (outputs[o2] != null)
       throw new FilterException("Output already taken. ");
 
-    //TODO : exceptions for blocks that are not added
-    GraphNode node = hash.get(f1);
+    try
+    {
+      GraphNode node = hash.get(f1);
+    }
+    catch(Exception e)
+    {
+      throw new FilterException("Filter used has not been added before. ");
+    }
+
     GraphNode out = new GraphNode(1, o2);
     outputs[o2] = out;
     node.connectOutput(o1, out);
@@ -136,22 +149,24 @@ public class CompositeFilter implements Filter
     if (i2 >= f2.nbInputs())
       throw new FilterException("Wrong input for f2. ");
 
-    //TODO : exceptions for blocks that are not added
-    GraphNode node = hash.get(f2);
+    try
+    {
+      GraphNode node = hash.get(f2);
+    }
+    catch(Exception e)
+    {
+      throw new FilterException("Filter used has not been added before. ");
+    }
+
     GraphNode in = new GraphNode(0, i1);
     in.connectOutput(i1, node);
     node.connectInput(i2, in);
   }
 
   /**
-  * Method resettiong the filter,
+  * Method resetting every filter of the compositefilter
   *
-  * @param f1 The first filter
-  * @param o1 The output of f1 that needs to be connected with o2
-  * @param o2 The output of the Composite Filter
   */
-
-  //TODO : Is it correct ?
   public void reset(){
     Enumeration<Filter> keys = hash.keys();
     while(keys.hasMoreElements())

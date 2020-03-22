@@ -45,7 +45,7 @@ public class Example
             audioFilter.connectInputToBlock(0, mult1, 0);
             audioFilter.connectInputToBlock(0, mult2, 0);
             audioFilter.connectBlockToBlock(mult1, 0, add, 0);
-            audioFilter.connectBlockToBlock(mult2, 0, add, 1);
+            audioFilter.connectBlockToBlock(mult3, 0, add, 1);
             audioFilter.connectBlockToOutput(add, 0, 0);
 
 

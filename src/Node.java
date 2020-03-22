@@ -1,3 +1,4 @@
+// a simple Node classes
 public class Node
 {
   private Node next;

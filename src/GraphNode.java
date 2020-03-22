@@ -20,7 +20,9 @@ public class GraphNode
 
   private double[] currentOutput;
 
-  private int checked;
+  private int check;
+
+  private int tmp;
 
   /**
   * GraphNode constructor, create a node by a filter
@@ -45,7 +47,9 @@ public class GraphNode
     linko = -1;
 
     currentOutput = null;
-    checked = 1;
+    check = 0;
+
+    tmp = 0;
   }
 
   /**
@@ -66,7 +70,7 @@ public class GraphNode
       inputs = 0;
       outputs = 1;
       currentOutput = null;
-      checked = 1;
+      check = 0;
     }
     else{
       this.compositeOutput = compositeNum;
@@ -75,7 +79,7 @@ public class GraphNode
       outputs = 1;
       in = new GraphNode[1];
       currentOutput = null;
-      checked = 1;
+      check = 0;
     }
   }
   /**
@@ -124,51 +128,60 @@ public class GraphNode
    */
   public double getOutput(double[] input) throws FilterException
   {
-    checked = 0;
+    check = 1;
 
     if(compositeInput != -1)
       return input[linko];
+    //
+    // if(currentOutput != null)
+    //   return currentOutput[linko];
+    //
+    // if (filter instanceof DelayFilter && flag == 0){
+    //   DelayFilter delay = (DelayFilter) filter;
+    //   currentOutput = delay.viewOutput();
+    //   flag = 1;
+    //   return currentOutput[linko];
+    // }
 
-    if(currentOutput != null)
-      return currentOutput[linko];
-
-    if (filter instanceof DelayFilter && flag == 0){
-      DelayFilter delay = (DelayFilter) filter;
-      currentOutput = delay.viewOutput();
-      flag = 1;
-      return currentOutput[linko];
+    if(filter instanceof DelayFilter && check == 1){
+      check = 0;
+      return tmp;
     }
 
     double[] inputArray = new double[inputs];
     for(int i = 0; i < inputs; i++){
       inputArray[i] = in[i].getOutput(input);
     }
-    if(compositeOutput != -1)
+    if(compositeOutput != -1){
+      check = 0;
       return inputArray[compositeOutput];
+    }
 
     currentOutput = filter.computeOneStep(inputArray);
+    check = 0;
     return currentOutput[linko];
   }
 
-  public void check(double[] input) throws FilterException
-  {
-    if(checked == 1) return;
-    for(int i = 0; i < inputs; i++){
-      in[i].check(input);
-    }
-    if(flag == 1){
-      this.getOutput(input);
-      flag = 0;
-    }
-    checked = 1;
-  }
 
-  public void resetNode()
-  {
-    if(currentOutput == null) return;
-    for(int i = 0; i < inputs; i++){
-      in[i].resetNode();
-    }
-    currentOutput = null;
-  }
+//   public void check(double[] input) throws FilterException
+//   {
+//     if(checked == 1) return;
+//     for(int i = 0; i < inputs; i++){
+//       in[i].check(input);
+//     }
+//     if(flag == 1){
+//       this.getOutput(input);
+//       flag = 0;
+//     }
+//     checked = 1;
+//   }
+//
+//   public void resetNode()
+//   {
+//     if(currentOutput == null) return;
+//     for(int i = 0; i < inputs; i++){
+//       in[i].resetNode();
+//     }
+//     currentOutput = null;
+//   }
 }

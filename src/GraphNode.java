@@ -1,9 +1,12 @@
 import be.uliege.montefiore.oop.audio.*;
 import java.util.*; // changer en seulement ce qui nous arranges à la fin
 
+/**
+* Class allowing a graph representation of the composite filter.
+*/
 public class GraphNode
 {
-
+  //
   private int linko;
 
   private int compositeInput;

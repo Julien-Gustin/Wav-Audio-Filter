@@ -13,6 +13,12 @@ public class CompositeFilter implements Filter
   public int nbInputs(){return nbInputs;}
   public int nbOutputs(){return nbOutputs;}
 
+  /**
+  * CompositeFilter constructor, create a new CompositeFilter by his in/out
+  *
+  * @param inputs the numbers of inputs of the CompositeFilter
+  * @param outputs the numbers of outputs of the CompositeFilter
+  */
   public CompositeFilter(int inputs, int outputs)
   {
     nbInputs = inputs;
@@ -32,15 +38,34 @@ public class CompositeFilter implements Filter
     for(int i = 0; i < nbOutputs; i++)
       output[i] = outputs[i].getOutput(input);
 
+      for(int i = 0; i < nbOutputs; i++)
+        outputs[i].check(input);
+
+    for(int i = 0; i < nbOutputs; i++)
+      outputs[i].resetNode();
+
     return output;
   }
 
+  /**
+  * add a block ( filter ) to the CompositeFilter
+  *
+  * @param f This is a filter
+  */
   public void addBlock(Filter f)
   {
     GraphNode data = new GraphNode(f);
     hash.put(f, data);
   }
 
+  /**
+  * connect two block together in the CompositeFilter
+  *
+  * @param f1 The first filter
+  * @param o1 The outputs of the first filter who need to be connected with i2
+  * @param f2 The second filter
+  * @param i2 The input of the second filter which is connected with o1
+  */
   public void connectBlockToBlock(Filter f1, int o1, Filter f2, int i2) throws FilterException
   {
     if (o1 >= f1.nbOutputs())
@@ -53,9 +78,15 @@ public class CompositeFilter implements Filter
 
     node1.connectOutput(o1, node2);
     node2.connectInput(i2, node1);
-
   }
 
+  /**
+  * connect a block to the composite Output
+  *
+  * @param f1 The first filter
+  * @param o1 The outputs of the first filter who need to be connected with i2
+  * @param o2 The output of the Composite Filter
+  */
   public void connectBlockToOutput(Filter f1, int o1, int o2) throws FilterException
   {
     if (o1 >= f1.nbOutputs())

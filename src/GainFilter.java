@@ -21,8 +21,6 @@ public class GainFilter implements Filter
    */
   public double[] computeOneStep(double[] input) throws FilterException
   {
-    if(gain < 0)
-      throw new FilterException("Gain should be strictly positive");
 
     double[] output = new double [1];
 

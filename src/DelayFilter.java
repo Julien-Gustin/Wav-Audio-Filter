@@ -33,10 +33,10 @@ public class DelayFilter implements Filter
   public double[] computeOneStep(double[] input) throws FilterException
   {
 
-    if(needsInput==1)
+    if(needsInput == 1)
       throw new FilterException ("No previous input.");
 
-    if(delay < 0)
+    if(delay <= 0)
       throw new FilterException("Delay should be strictly positive. ");
 
     if (input.length != 1)
@@ -56,12 +56,13 @@ public class DelayFilter implements Filter
     return output;
   }
 
-  public double[] getOutput() throws FilterException
+  public double[] viewOutput() throws FilterException
   {
-    if(needsInput==1)
+
+    if(needsInput == 1)
       throw new FilterException ("No previous input.");
 
-    if(delay < 0)
+    if(delay <= 0)
       throw new FilterException("Delay should be strictly positive. ");
 
     double[] output = new double [1];
@@ -69,14 +70,12 @@ public class DelayFilter implements Filter
     if(compt > 0)
     {
       output[0] = 0;
-      compt--;
     }
     else
       output[0] = (Double)sQueue.view();
 
     return output;
   }
-
 
   public void reset(){
     compt = delay;

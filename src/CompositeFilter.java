@@ -37,12 +37,17 @@ public class CompositeFilter implements Filter
 
     for(int i = 0; i < nbOutputs; i++)
       output[i] = outputs[i].getOutput(input);
-    //
-    //   for(int i = 0; i < nbOutputs; i++)
-    //     outputs[i].check(input);
-    //
-    // for(int i = 0; i < nbOutputs; i++)
-    //   outputs[i].resetNode();
+
+      for(int i = 0; i < nbOutputs; i++)
+        outputs[i].check(input);
+
+        //System.out.println("Output : " + Arrays.toString(output));
+
+    for(int i = 0; i < nbOutputs; i++)
+      outputs[i].resetNode();
+
+      //System.out.println("step");
+
 
     return output;
   }

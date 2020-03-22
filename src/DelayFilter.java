@@ -33,6 +33,7 @@ public class DelayFilter implements Filter
   public double[] computeOneStep(double[] input) throws FilterException
   {
 
+
     if(needsInput == 1)
       throw new FilterException ("No previous input.");
 

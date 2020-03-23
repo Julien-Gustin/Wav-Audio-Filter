@@ -115,8 +115,8 @@ public class CompositeFilter implements Filter
   {
     if (o1 >= f1.nbOutputs())
       throw new FilterException("Wrong output for f1. ");
-    if (o2 >= this.nbInputs())
-      throw new FilterException("Wrong input for the composite filter. ");
+    if (o2 >= nbOutputs)
+      throw new FilterException("Wrong output for the composite filter. ");
     if (outputs[o2] != null)
       throw new FilterException("Output already taken. ");
 
@@ -145,7 +145,7 @@ public class CompositeFilter implements Filter
   public void connectInputToBlock(int i1, Filter f2, int i2) throws FilterException
   {
     if (i1 >= nbInputs)
-      throw new FilterException("Wrong output for the composite filter. ");
+      throw new FilterException("Wrong input for the composite filter. ");
     if (i2 >= f2.nbInputs())
       throw new FilterException("Wrong input for f2. ");
 

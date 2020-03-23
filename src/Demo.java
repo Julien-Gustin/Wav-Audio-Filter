@@ -2,7 +2,7 @@
  * INFO0062 - Object-Oriented Programming by Gustin Julien & Raze Felicien
  * Demo of filter created with a CompositeFilter class
  *
- * This short class refer to an echo class
+ * This short class refers to an echo class
  *
  * @author: Gustin Julien & Raze Felicien
  */
@@ -29,6 +29,7 @@ public class Demo
 
             // Connects the blocks together
             audioFilter.connectInputToBlock(0, add, 0);
+
             audioFilter.connectBlockToBlock(add, 0, delay, 0);
             audioFilter.connectBlockToBlock(delay, 0, mult, 0);
             audioFilter.connectBlockToBlock(mult, 0, add, 1);

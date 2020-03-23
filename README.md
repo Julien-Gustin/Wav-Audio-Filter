@@ -4,8 +4,8 @@
 
 ```sh
 javac -d bin -cp bin:audio.jar src/*.java
-Or use MakeFile by just tipping make
 ```
+Or use MakeFile by just typing make
 
 **N.B.:** if you are under Windows, the ":" must be replaced by ";".
 

@@ -8,7 +8,8 @@ public class AdditionFilter implements Filter
 
   public AdditionFilter(){}
 
-  public double[] computeOneStep(double[] input) throws FilterException{
+  public double[] computeOneStep(double[] input) throws FilterException
+  {
     if (input.length != 2)
       throw new FilterException ("Wrong input length. ");
 

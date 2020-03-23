@@ -16,7 +16,8 @@ public class DelayFilter implements Filter
    *
    * @param delay should be > 0
    */
-  public DelayFilter(int delay){
+  public DelayFilter(int delay)
+  {
     this.delay = delay;
     compt = delay;
     sQueue = new Queue();
@@ -80,7 +81,8 @@ public class DelayFilter implements Filter
   /**
   * Reset the filter
   */
-  public void reset(){
+  public void reset()
+  {
     compt = delay;
     sQueue.reset();
   }

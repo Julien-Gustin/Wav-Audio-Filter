@@ -1,5 +1,6 @@
 import be.uliege.montefiore.oop.audio.*;
-import java.util.*; // changer en seulement ce qui nous arranges à la fin
+import java.util.Hashtable;
+import java.util.Enumeration;
 
 public class CompositeFilter implements Filter
 {
@@ -131,8 +132,6 @@ public class CompositeFilter implements Filter
     {
       throw new FilterException("Filter used has not been added before. ");
     }
-
-
 
   }
 

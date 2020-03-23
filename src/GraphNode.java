@@ -1,6 +1,4 @@
-import be.uliege.montefiore.oop.audio.*;
-import java.util.*; // changer en seulement ce qui nous arranges à la fin
-
+import be.uliege.montefiore.oop.audio.*; //TODO : remove what is in comment (like OUT) (useless)
 /**
 * Class allowing a graph representation of the composite filter.
 */
@@ -20,7 +18,7 @@ public class GraphNode
   private Filter filter;
 
   private GraphNode[] in;
-  private GraphNode[] out; // delete?
+  //private GraphNode[] out; // delete?
 
   private double[] currentOutput;
 
@@ -37,7 +35,7 @@ public class GraphNode
     outputs = filter.nbOutputs();
 
     in = new GraphNode[inputs];
-    out = new GraphNode[outputs];
+    //out = new GraphNode[outputs];
 
     this.filter = filter;
 
@@ -66,7 +64,7 @@ public class GraphNode
     if(InOut == 0){
       this.compositeInput = compositeNum;
       this.compositeOutput = -1;
-      out = new GraphNode[1];
+      //out = new GraphNode[1];
       inputs = 0;
       outputs = 1;
       currentOutput = null;
@@ -116,7 +114,7 @@ public class GraphNode
   public void connectOutput(int output, GraphNode node)
   {
     linko = output;
-    out[output] = node;
+    //out[output] = node;
   }
 
   /**
@@ -132,7 +130,7 @@ public class GraphNode
 
     if(compositeInput != -1){
       currentOutput = input;
-      return currentOutput[linko];
+      return currentOutput[compositeInput]; // modified by ju 23/03 ( linko => compositeInput ) TODO verif by fefe
     }
 
     if(currentOutput != null && flag == 0)

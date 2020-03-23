@@ -35,12 +35,13 @@ public class Test
             CompositeFilter audioFilterTrue = new CompositeFilter(1, 1);
 
             audioFilterTrue.addBlock(audioFilter);
-            audioFilterTrue.addBlock(add);
+
+            audioFilterTrue.addBlock(add2);
 
             audioFilterTrue.connectInputToBlock(0, audioFilter, 0);
             audioFilterTrue.connectBlockToBlock(audioFilter, 0, add, 0);
             audioFilterTrue.connectBlockToBlock(audioFilter, 1, add, 1);
-            audioFilterTrue.connectBlockToOutput(add, 0, 0);
+            audioFilterTrue.connectBlockToOutput(add2, 0, 0);
 
             // Applies the filter
             TestAudioFilter.applyFilter(audioFilterTrue, args[0], args[1]);

@@ -80,6 +80,7 @@ public class GraphNode
       checked = 1;
     }
   }
+
   /**
    * Return the numbers of inputs associated of the node
    *
@@ -148,9 +149,10 @@ public class GraphNode
     for(int i = 0; i < inputs; i++){
       inputArray[i] = in[i].getOutput(input);
     }
+
     if(compositeOutput != -1){
       currentOutput = inputArray;
-      return currentOutput[compositeOutput];
+      return currentOutput[0];
     }
 
     currentOutput = filter.computeOneStep(inputArray);

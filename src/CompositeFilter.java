@@ -50,8 +50,9 @@ public class CompositeFilter implements Filter
     double[] output = new double[nbOutputs];
 
     //Gets the output each GraphNode associated to a filter output.
-    for(int i = 0; i < nbOutputs; i++)
+    for(int i = 0; i < nbOutputs; i++){
       output[i] = outputs[i].getOutput(input);
+    }
 
     //Gives the inputs to the DelayFilters used in the computation process
     for(int i = 0; i < nbOutputs; i++)
@@ -126,7 +127,8 @@ public class CompositeFilter implements Filter
       GraphNode out = new GraphNode(1, o2);
       outputs[o2] = out;
       node.connectOutput(o1, out);
-      out.connectInput(o2, node);
+      out.connectInput(0, node);
+
     }
     catch(Exception e)
     {

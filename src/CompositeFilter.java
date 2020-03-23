@@ -122,16 +122,17 @@ public class CompositeFilter implements Filter
     try
     {
       GraphNode node = hash.get(f1);
+      GraphNode out = new GraphNode(1, o2);
+      outputs[o2] = out;
+      node.connectOutput(o1, out);
+      out.connectInput(o2, node);
     }
     catch(Exception e)
     {
       throw new FilterException("Filter used has not been added before. ");
     }
 
-    GraphNode out = new GraphNode(1, o2);
-    outputs[o2] = out;
-    node.connectOutput(o1, out);
-    out.connectInput(o2, node);
+
 
   }
 
@@ -152,15 +153,15 @@ public class CompositeFilter implements Filter
     try
     {
       GraphNode node = hash.get(f2);
+      GraphNode in = new GraphNode(0, i1);
+      in.connectOutput(i1, node);
+      node.connectInput(i2, in);
     }
     catch(Exception e)
     {
       throw new FilterException("Filter used has not been added before. ");
     }
 
-    GraphNode in = new GraphNode(0, i1);
-    in.connectOutput(i1, node);
-    node.connectInput(i2, in);
   }
 
   /**

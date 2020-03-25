@@ -25,9 +25,8 @@ public class CompositeFilter implements Filter
     hash = new Hashtable<Filter, GraphNode>();
 
     this.outputs = new GraphNode[outputs];
-    for(int i = 0; i < outputs; i++){
+    for(int i = 0; i < outputs; i++)
       this.outputs[i] = null;
-    }
   }
 
   /**
@@ -95,12 +94,11 @@ public class CompositeFilter implements Filter
       GraphNode node1 = hash.get(f1);
       GraphNode node2 = hash.get(f2);
 
-      node1.connectOutput(o1, node2);
-      node2.connectInput(i2, node1);
+      node2.connectInOut(node1, o1, i2);
     }
     catch(Exception e)
     {
-      throw new FilterException("Filter used has not been added before. ");
+      throw new FilterException("Filter used has not been added before. 1");
     }
   }
 
@@ -115,22 +113,22 @@ public class CompositeFilter implements Filter
   {
     if (o1 >= f1.nbOutputs())
       throw new FilterException("Wrong output for f1. ");
-    if (o2 >= this.nbInputs())
-      throw new FilterException("Wrong input for the composite filter. ");
+    if (o2 >= nbOutputs)
+      throw new FilterException("Wrong output for the composite filter. ");
     if (outputs[o2] != null)
       throw new FilterException("Output already taken. ");
 
     try
     {
       GraphNode node = hash.get(f1);
-      GraphNode out = new GraphNode(1, o2);
+      GraphNode out = new GraphNode(1, o2, nbOutputs);
       outputs[o2] = out;
-      node.connectOutput(o1, out);
-      out.connectInput(o2, node);
+
+      out.connectInOut(node, 0, o1);
     }
     catch(Exception e)
     {
-      throw new FilterException("Filter used has not been added before. ");
+      throw new FilterException("Filter used has not been added before. 1");
     }
 
   }
@@ -145,22 +143,21 @@ public class CompositeFilter implements Filter
   public void connectInputToBlock(int i1, Filter f2, int i2) throws FilterException
   {
     if (i1 >= nbInputs)
-      throw new FilterException("Wrong output for the composite filter. ");
+      throw new FilterException("Wrong output for the composite filter. 2");
     if (i2 >= f2.nbInputs())
       throw new FilterException("Wrong input for f2. ");
 
     try
     {
       GraphNode node = hash.get(f2);
-      GraphNode in = new GraphNode(0, i1);
-      in.connectOutput(i1, node);
-      node.connectInput(i2, in);
+      GraphNode in = new GraphNode(0, i1, 0);
+
+      node.connectInOut(in, i2, i1);
     }
     catch(Exception e)
     {
-      throw new FilterException("Filter used has not been added before. ");
+      throw new FilterException("Filter used has not been added before. 3");
     }
-
   }
 
   /**

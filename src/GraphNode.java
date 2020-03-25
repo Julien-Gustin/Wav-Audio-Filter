@@ -1,11 +1,12 @@
-import be.uliege.montefiore.oop.audio.*; //TODO : remove what is in comment (like OUT) (useless)
+import be.uliege.montefiore.oop.audio.*;
+//TODO : remove what is in comment (like OUT) (useless)
 /**
 * Class allowing a graph representation of the composite filter.
 */
 public class GraphNode
 {
-  //
-  private int linko;
+
+  private int[] linko;
 
   private int compositeInput;
   private int compositeOutput;
@@ -18,11 +19,11 @@ public class GraphNode
   private Filter filter;
 
   private GraphNode[] in;
-  //private GraphNode[] out; // delete?
 
   private double[] currentOutput;
 
-  private int checked;
+  private int checked; //bool?
+
 
   /**
   * GraphNode constructor, create a node by a filter
@@ -44,10 +45,11 @@ public class GraphNode
     compositeInput = -1;
     compositeOutput = -1;
 
-    linko = -1;
+    linko = new int[filter.nbInputs()];
 
     currentOutput = null;
     checked = 1;
+
   }
 
   /**
@@ -59,12 +61,13 @@ public class GraphNode
    * @param compositeNum is this in/output associated
    *
    */
-  public GraphNode(int InOut, int compositeNum)
+  public GraphNode(int InOut, int compositeNum, int length)
   {
+    linko = new int[length]; // à changer
+
     if(InOut == 0){
       this.compositeInput = compositeNum;
       this.compositeOutput = -1;
-      //out = new GraphNode[1];
       inputs = 0;
       outputs = 1;
       currentOutput = null;
@@ -100,21 +103,11 @@ public class GraphNode
    * @param input
    * @param node
    */
-  public void connectInput(int input, GraphNode node)
-  {
-    in[input] = node;
-  }
 
-  /**
-   * Connect the input of the current node with another one
-   *
-   * @param input
-   * @param node
-   */
-  public void connectOutput(int output, GraphNode node)
+  public void connectInOut(GraphNode f1, int o1, int i2)
   {
-    linko = output;
-    //out[output] = node;
+    linko[i2] = o1;
+    in[i2] = f1;
   }
 
   /**
@@ -128,59 +121,63 @@ public class GraphNode
   {
     checked = 0;
 
-    if(compositeInput != -1){
+    if(compositeInput != -1)
+    {
       currentOutput = input;
-      return currentOutput[compositeInput]; // modified by ju 23/03 ( linko => compositeInput ) TODO verif by fefe
+      return currentOutput[compositeInput];
     }
 
     if(currentOutput != null && flag == 0)
-      return currentOutput[linko];
+      return currentOutput[0];
 
-    if (filter instanceof DelayFilter && flag == 0){
-
+    if(filter instanceof DelayFilter && flag == 0)
+    {
       DelayFilter delay = (DelayFilter) filter;
       currentOutput = delay.viewOutput();
       flag = 1;
-      return currentOutput[linko];
+      return currentOutput[0]; // bc nbOutputs of a delay filter = 1
     }
 
     double[] inputArray = new double[inputs];
     for(int i = 0; i < inputs; i++){
-      inputArray[i] = in[i].getOutput(input);
+      if(in[i].filter instanceof CompositeFilter)
+        inputArray[i] = in[i].filter.computeOneStep(input)[linko[i]];
+      else
+        inputArray[i] = in[i].getOutput(input);
     }
-    if(compositeOutput != -1){
+
+    if(compositeOutput != -1)
+    {
       currentOutput = inputArray;
-      return currentOutput[compositeOutput];
+      return currentOutput[linko[0]]; //linko[0] sera toujours égal à 0
     }
 
     currentOutput = filter.computeOneStep(inputArray);
-    return currentOutput[linko];
+    return currentOutput[linko[0]]; //linko[0] sera toujours égal à 0 preue en dessin
   }
 
   public void check(double[] input) throws FilterException
   {
     if(checked == 1) return;
         checked = 1;
-    for(int i = 0; i < inputs; i++){
+    for(int i = 0; i < inputs; i++)
       in[i].check(input);
-    }
-    if(flag == 1){
-      //System.out.println("cc");
+
+    if(flag == 1)
+    {
       this.getOutput(input);
       flag = 0;
     }
-    //if(filter != null){
-      //Class cls = filter.getClass();
-      //System.out.println(cls.getName() + Arrays.toString(currentOutput));}
   }
 
   public void resetNode()
   {
-    if(currentOutput == null){
-      return;}
-          currentOutput = null;
-    for(int i = 0; i < inputs; i++){
+    if(currentOutput == null){return;}
+
+    currentOutput = null;
+
+    for(int i = 0; i < inputs; i++)
       in[i].resetNode();
-    }
+
   }
 }

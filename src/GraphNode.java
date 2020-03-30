@@ -140,7 +140,8 @@ public class GraphNode
 
     double[] inputArray = new double[inputs];
     for(int i = 0; i < inputs; i++){
-      if(in[i].filter instanceof CompositeFilter)
+
+      if(in[i].filter instanceof CompositeFilter && !(in[i].in[0].filter instanceof Filter)) // it's mean that it is the composite input
         inputArray[i] = in[i].filter.computeOneStep(input)[linko[i]];
       else
         inputArray[i] = in[i].getOutput(input);

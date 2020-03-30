@@ -130,7 +130,6 @@ public class CompositeFilter implements Filter
     {
       throw new FilterException("Filter used has not been added before. 1");
     }
-
   }
 
   /**

@@ -5,14 +5,14 @@ JC =@ javac
 	$(JC) $(JFLAGS) src/*.java
 
 CLASSES = \
-        src/AdditionFilter.java \
-				src/CompositeFilter.java \
-				src/DelayFilter.java \
-				src/Demo.java \
-				src/GainFilter.java \
-				src/GraphNode.java \
-				src/Node.java \
-				src/Queue.java
+				src/Demo.java 
+        # src/AdditionFilter.java \
+				# src/CompositeFilter.java \
+				# src/DelayFilter.java \
+				# src/GainFilter.java \
+				# src/GraphNode.java \
+				# src/Node.java \
+				# src/Queue.java
 
 default: classes
 

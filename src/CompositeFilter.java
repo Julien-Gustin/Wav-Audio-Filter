@@ -48,7 +48,6 @@ public class CompositeFilter implements Filter
   {
     double[] output = new double[nbOutputs];
 
-    // System.out.println(nbOutputs);
     //Gets the output each GraphNode associated to a filter output.
     for(int i = 0; i < nbOutputs; i++)
       output[i] = outputs[i].getOutput(input, i);
@@ -60,11 +59,6 @@ public class CompositeFilter implements Filter
     //Resets the fields currentOutput in the GraphNodes to a null pointer
     for(int i = 0; i < nbOutputs; i++)
       outputs[i].resetNode();
-
-    // for(int i = 0; i < nbOutputs && nbOutputs == 2; i++)
-    // {
-    //   System.out.print(output[i] + " ");
-    // }
 
     return output;
   }

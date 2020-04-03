@@ -126,11 +126,9 @@ public class GraphNode
       return currentOutput[0];
     }
 
-    if(currentOutput != null && flag == 0 && out != 1)
+    if(currentOutput != null && flag == 0)
       return currentOutput[0];
 
-    if(filter instanceof CompositeFilter)
-      System.out.println(out);
 
     if(filter instanceof DelayFilter && flag == 0)
     {
@@ -152,12 +150,16 @@ public class GraphNode
     if(compositeOutput != -1)
     {
       currentOutput = inputArray;
-      return currentOutput[0]; //linko[0] sera toujours égal à 0
+      return currentOutput[0]; // Always equal to 0 cause that each output is a node
     }
 
-    currentOutput = filter.computeOneStep(inputArray);
+    double[] tmp = filter.computeOneStep(inputArray);
 
-    return currentOutput[out]; //linko[0] sera toujours égal à 0 preue en dessin
+
+    if(!(filter instanceof CompositeFilter)) // so we don't need to reset the currentOutput of the composite filter
+     currentOutput = tmp;
+
+    return tmp[out];
   }
 
   public void check(double[] input) throws FilterException

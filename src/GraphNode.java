@@ -103,7 +103,6 @@ public class GraphNode
    * @param input
    * @param node
    */
-
   public void connectInOut(GraphNode f1, int o1, int i2)
   {
     linko[i2] = o1;
@@ -117,18 +116,21 @@ public class GraphNode
    *
    * @return currentOutput the output of the current filter needed for the next input
    */
-  public double getOutput(double[] input) throws FilterException
+  public double getOutput(double[] input, int out) throws FilterException
   {
     checked = 0;
 
     if(compositeInput != -1)
     {
       currentOutput = input;
-      return currentOutput[compositeInput];
+      return currentOutput[0];
     }
 
-    if(currentOutput != null && flag == 0)
+    if(currentOutput != null && flag == 0 && out != 1)
       return currentOutput[0];
+
+    if(filter instanceof CompositeFilter)
+      System.out.println(out);
 
     if(filter instanceof DelayFilter && flag == 0)
     {
@@ -140,21 +142,22 @@ public class GraphNode
 
     double[] inputArray = new double[inputs];
     for(int i = 0; i < inputs; i++){
+      if(filter instanceof CompositeFilter && in[i].compositeInput != -1)
+        inputArray[i] = input[linko[i]];
 
-      if(in[i].filter instanceof CompositeFilter && !(in[i].in[0].filter instanceof Filter)) // it's mean that it is the composite input
-        inputArray[i] = in[i].filter.computeOneStep(input)[linko[i]];
       else
-        inputArray[i] = in[i].getOutput(input);
+        inputArray[i] = in[i].getOutput(input, linko[i]);
     }
 
     if(compositeOutput != -1)
     {
       currentOutput = inputArray;
-      return currentOutput[linko[0]]; //linko[0] sera toujours égal à 0
+      return currentOutput[0]; //linko[0] sera toujours égal à 0
     }
 
     currentOutput = filter.computeOneStep(inputArray);
-    return currentOutput[linko[0]]; //linko[0] sera toujours égal à 0 preue en dessin
+
+    return currentOutput[out]; //linko[0] sera toujours égal à 0 preue en dessin
   }
 
   public void check(double[] input) throws FilterException
@@ -166,7 +169,7 @@ public class GraphNode
 
     if(flag == 1)
     {
-      this.getOutput(input);
+      this.getOutput(input, 0);
       flag = 0;
     }
   }

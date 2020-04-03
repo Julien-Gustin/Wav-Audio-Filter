@@ -48,9 +48,10 @@ public class CompositeFilter implements Filter
   {
     double[] output = new double[nbOutputs];
 
+    // System.out.println(nbOutputs);
     //Gets the output each GraphNode associated to a filter output.
     for(int i = 0; i < nbOutputs; i++)
-      output[i] = outputs[i].getOutput(input);
+      output[i] = outputs[i].getOutput(input, i);
 
     //Gives the inputs to the DelayFilters used in the computation process
     for(int i = 0; i < nbOutputs; i++)
@@ -59,6 +60,11 @@ public class CompositeFilter implements Filter
     //Resets the fields currentOutput in the GraphNodes to a null pointer
     for(int i = 0; i < nbOutputs; i++)
       outputs[i].resetNode();
+
+    // for(int i = 0; i < nbOutputs && nbOutputs == 2; i++)
+    // {
+    //   System.out.print(output[i] + " ");
+    // }
 
     return output;
   }
@@ -124,7 +130,7 @@ public class CompositeFilter implements Filter
       GraphNode out = new GraphNode(1, o2, nbOutputs);
       outputs[o2] = out;
 
-      out.connectInOut(node, 0, o1);
+      out.connectInOut(node, o1, 0);
     }
     catch(Exception e)
     {
@@ -151,7 +157,7 @@ public class CompositeFilter implements Filter
       GraphNode node = hash.get(f2);
       GraphNode in = new GraphNode(0, i1, 0);
 
-      node.connectInOut(in, i2, i1);
+      node.connectInOut(in, i1, i2);
     }
     catch(Exception e)
     {

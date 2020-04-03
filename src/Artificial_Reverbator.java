@@ -64,7 +64,8 @@ public class Artificial_Reverbator
           reverb.connectBlockToBlock(add2, 0, add3, 0);
           reverb.connectBlockToBlock(delay3, 0, delay4, 0);
           reverb.connectBlockToBlock(delay4, 0, nested2, 0);
-          reverb.connectBlockToBlock(nested2, 0, add3, 1);
+          reverb.connectBlockToBlock(nested2, 0, gain3, 0);
+          reverb.connectBlockToBlock(gain3, 0, add3, 1);
           reverb.connectBlockToBlock(nested2, 0, lowPass, 0);
           reverb.connectBlockToBlock(lowPass, 0, gain4, 0);
           reverb.connectBlockToBlock(gain4, 0, add1, 1);

@@ -24,6 +24,7 @@ public class GraphNode
 
   private int checked; //bool?
 
+  private boolean reset;
 
   /**
   * GraphNode constructor, create a node by a filter
@@ -34,9 +35,9 @@ public class GraphNode
   {
     inputs = filter.nbInputs();
     outputs = filter.nbOutputs();
+    reset = false;
 
     in = new GraphNode[inputs];
-    //out = new GraphNode[outputs];
 
     this.filter = filter;
 
@@ -64,6 +65,7 @@ public class GraphNode
   public GraphNode(int InOut, int compositeNum, int length)
   {
     linko = new int[length]; // à changer
+    reset = false;
 
     if(InOut == 0){
       this.compositeInput = compositeNum;
@@ -119,6 +121,7 @@ public class GraphNode
   public double getOutput(double[] input, int out) throws FilterException
   {
     checked = 0;
+    reset = false;
 
     if(compositeInput != -1)
     {
@@ -128,7 +131,6 @@ public class GraphNode
 
     if(currentOutput != null && flag == 0)
       return currentOutput[0];
-
 
     if(filter instanceof DelayFilter && flag == 0)
     {
@@ -140,7 +142,7 @@ public class GraphNode
 
     double[] inputArray = new double[inputs];
     for(int i = 0; i < inputs; i++){
-      if(filter instanceof CompositeFilter && in[i].compositeInput != -1)
+      if(in[i].compositeInput != -1)
         inputArray[i] = input[linko[i]];
 
       else
@@ -153,13 +155,9 @@ public class GraphNode
       return currentOutput[0]; // Always equal to 0 cause that each output is a node
     }
 
-    double[] tmp = filter.computeOneStep(inputArray);
+    currentOutput = filter.computeOneStep(inputArray);
 
-
-    if(!(filter instanceof CompositeFilter)) // so we don't need to reset the currentOutput of the composite filter
-     currentOutput = tmp;
-
-    return tmp[out];
+    return currentOutput[out];
   }
 
   public void check(double[] input) throws FilterException
@@ -178,7 +176,9 @@ public class GraphNode
 
   public void resetNode()
   {
-    if(currentOutput == null){return;}
+    // if(currentOutput == null){return;}
+    if(reset) return;
+    reset = true;
 
     currentOutput = null;
 

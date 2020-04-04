@@ -98,7 +98,7 @@ public class CompositeFilter implements Filter
     }
     catch(Exception e)
     {
-      throw new FilterException("Filter used has not been added before. 1");
+      throw new FilterException("Filter used has not been added before, in connectBlockToBlock method");
     }
   }
 
@@ -116,7 +116,7 @@ public class CompositeFilter implements Filter
     if (o2 >= nbOutputs)
       throw new FilterException("Wrong output for the composite filter. ");
     if (outputs[o2] != null)
-      throw new FilterException("Output already taken. ");
+      throw new FilterException("Output " + o2 + " already taken");
 
     try
     {
@@ -128,7 +128,7 @@ public class CompositeFilter implements Filter
     }
     catch(Exception e)
     {
-      throw new FilterException("Filter used has not been added before. 1");
+      throw new FilterException("Filter used to connect to the output has not been added before.");
     }
   }
 
@@ -155,7 +155,7 @@ public class CompositeFilter implements Filter
     }
     catch(Exception e)
     {
-      throw new FilterException("Filter used has not been added before. 3");
+      throw new FilterException("Filter used to connect to the input has not been added before.");
     }
   }
 

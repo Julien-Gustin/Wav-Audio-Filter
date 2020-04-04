@@ -5,8 +5,8 @@ JC =@ javac
 	$(JC) $(JFLAGS) src/*.java
 
 CLASSES = \
-				src/Demo.java
-        # src/AdditionFilter.java \
+				src/Demo.java \
+        src/AdditionFilter.java 
 				# src/CompositeFilter.java \
 				# src/DelayFilter.java \
 				# src/GainFilter.java \

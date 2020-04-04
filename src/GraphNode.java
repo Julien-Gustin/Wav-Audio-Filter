@@ -49,7 +49,7 @@ public class GraphNode
     currentOutput = null;
 
     checked = true;
-    reset = true;
+    reset = false;
 
   }
 
@@ -141,8 +141,11 @@ public class GraphNode
       if(in[i].compositeInput != -1)
         inputArray[i] = input[linko[i]];
 
-      else
+      else{
         inputArray[i] = in[i].getOutput(input, linko[i]);
+        if(in[i].filter instanceof CompositeFilter)
+          in[i].currentOutput = null;
+      }
     }
 
     if(compositeOutput != -1)
@@ -181,6 +184,5 @@ public class GraphNode
 
     for(int i = 0; i < inputs; i++)
       in[i].resetNode();
-
   }
 }

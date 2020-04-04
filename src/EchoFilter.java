@@ -10,7 +10,7 @@ import be.uliege.montefiore.oop.audio.*;
 
 public class EchoFilter extends CompositeFilter
 {
-  public EchoFilter(int delayEcho, double gainEcho)
+  public EchoFilter(int delayEcho, double gainEcho) throws FilterException
   {
     super(1, 1);
 

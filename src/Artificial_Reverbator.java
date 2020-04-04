@@ -10,7 +10,7 @@ import be.uliege.montefiore.oop.audio.*;
 
 public class Artificial_Reverbator extends CompositeFilter
 {
-    public Artificial_Reverbator()
+    public Artificial_Reverbator() throws FilterException
     {
       super(1, 1);
         try

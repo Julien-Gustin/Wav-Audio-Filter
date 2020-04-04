@@ -1,4 +1,4 @@
-/*
+ /*
  * INFO0062 - Object-Oriented Programming by Gustin Julien & Raze Felicien
  * Reverb of filter created with a CompositeFilter class
  *
@@ -8,10 +8,11 @@
 
 import be.uliege.montefiore.oop.audio.*;
 
-public class Artificial_Reverbator
+public class Artificial_Reverbator extends CompositeFilter
 {
-    public static void main(String[] args)
+    public Artificial_Reverbator()
     {
+      super(1, 1);
         try
         {
           final int SAMPLE = 44100;
@@ -32,47 +33,46 @@ public class Artificial_Reverbator
                  add3 = new AdditionFilter(),
                  lowPass = new LowpassFilter((int)(0.002*SAMPLE), 0.7133);
 
-          CompositeFilter reverb = new CompositeFilter(1, 1);
+         addBlock(delay1);
+         addBlock(delay2);
+         addBlock(delay3);
+         addBlock(delay4);
+         addBlock(gain1);
+         addBlock(gain2);
+         addBlock(gain3);
+         addBlock(gain4);
+         addBlock(nested1);
+         addBlock(nested2);
+         addBlock(add1);
+         addBlock(add2);
+         addBlock(add3);
+         addBlock(lowPass);
+         addBlock(Dpass);
 
-          reverb.addBlock(delay1);
-          reverb.addBlock(delay2);
-          reverb.addBlock(delay3);
-          reverb.addBlock(delay4);
-          reverb.addBlock(gain1);
-          reverb.addBlock(gain2);
-          reverb.addBlock(gain3);
-          reverb.addBlock(gain4);
-          reverb.addBlock(nested1);
-          reverb.addBlock(nested2);
-          reverb.addBlock(add1);
-          reverb.addBlock(add2);
-          reverb.addBlock(add3);
-          reverb.addBlock(lowPass);
-          reverb.addBlock(Dpass);
+         //Connect input
+         connectInputToBlock(0, add1, 0);
 
-          reverb.connectInputToBlock(0, add1, 0);
+         //Connect Block together
+         connectBlockToBlock(add1, 0, Dpass, 0);
+         connectBlockToBlock(Dpass, 0, delay1, 0);
+         connectBlockToBlock(delay1, 0, gain1, 0);
+         connectBlockToBlock(delay1, 0, delay2, 0);
+         connectBlockToBlock(delay2, 0, nested1, 0);
+         connectBlockToBlock(nested1, 0, delay3, 0);
+         connectBlockToBlock(delay3, 0, gain2, 0);
+         connectBlockToBlock(gain2, 0, add2, 0);
+         connectBlockToBlock(gain1, 0, add2, 1);
+         connectBlockToBlock(add2, 0, add3, 0);
+         connectBlockToBlock(delay3, 0, delay4, 0);
+         connectBlockToBlock(delay4, 0, nested2, 0);
+         connectBlockToBlock(nested2, 0, gain3, 0);
+         connectBlockToBlock(gain3, 0, add3, 1);
+         connectBlockToBlock(nested2, 0, lowPass, 0);
+         connectBlockToBlock(lowPass, 0, gain4, 0);
+         connectBlockToBlock(gain4, 0, add1, 1);
 
-          reverb.connectBlockToBlock(add1, 0, Dpass, 0);
-          reverb.connectBlockToBlock(Dpass, 0, delay1, 0);
-          reverb.connectBlockToBlock(delay1, 0, gain1, 0);
-          reverb.connectBlockToBlock(delay1, 0, delay2, 0);
-          reverb.connectBlockToBlock(delay2, 0, nested1, 0);
-          reverb.connectBlockToBlock(nested1, 0, delay3, 0);
-          reverb.connectBlockToBlock(delay3, 0, gain2, 0);
-          reverb.connectBlockToBlock(gain2, 0, add2, 0);
-          reverb.connectBlockToBlock(gain1, 0, add2, 1);
-          reverb.connectBlockToBlock(add2, 0, add3, 0);
-          reverb.connectBlockToBlock(delay3, 0, delay4, 0);
-          reverb.connectBlockToBlock(delay4, 0, nested2, 0);
-          reverb.connectBlockToBlock(nested2, 0, gain3, 0);
-          reverb.connectBlockToBlock(gain3, 0, add3, 1);
-          reverb.connectBlockToBlock(nested2, 0, lowPass, 0);
-          reverb.connectBlockToBlock(lowPass, 0, gain4, 0);
-          reverb.connectBlockToBlock(gain4, 0, add1, 1);
-
-          reverb.connectBlockToOutput(add3, 0, 0);
-
-          TestAudioFilter.applyFilter(reverb, args[0], args[1]);
+         //Connect Output
+         connectBlockToOutput(add3, 0, 0);
         }
         catch(Exception e)
         {

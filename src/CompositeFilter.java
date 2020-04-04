@@ -56,7 +56,7 @@ public class CompositeFilter implements Filter
     for(int i = 0; i < nbOutputs; i++)
       outputs[i].check(input);
 
-    //Resets the fields currentOutput in the GraphNodes to a null pointer
+    // Resets the fields currentOutput in the GraphNodes to a null pointer
     for(int i = 0; i < nbOutputs; i++)
       outputs[i].resetNode();
 

@@ -12,31 +12,26 @@ public class Demo
 {
     public static void main(String[] args)
     {
+      if(args.length < 2 || args.length  > 3)
+      {
+        System.out.println("Wrong inputs, read REAME.MD");
+        return;
+      }
         try
         {
             // Creates the CompositeFilter object, with one input and one output
-            CompositeFilter audioFilter = new CompositeFilter(1, 1);
+            if(args.length == 3 && args[0].equals("Reverb"))
+            {
+              Artificial_Reverbator reverb = new Artificial_Reverbator();
+              TestAudioFilter.applyFilter(reverb, args[1], args[2]);
+            }
 
-            // Creates the basic blocks
-            Filter delay = new DelayFilter(22050);
-            Filter mult = new GainFilter(0.6);
-            Filter add = new AdditionFilter();
+            else
+            {
 
-            // Adds them to the CompositeFilter
-            audioFilter.addBlock(mult);
-            audioFilter.addBlock(delay);
-            audioFilter.addBlock(add);
-
-            // Connects the blocks together
-            audioFilter.connectInputToBlock(0, add, 0);
-            audioFilter.connectBlockToBlock(add, 0, delay, 0);
-            audioFilter.connectBlockToBlock(delay, 0, mult, 0);
-            audioFilter.connectBlockToBlock(mult, 0, add, 1);
-
-            audioFilter.connectBlockToOutput(add, 0, 0);
-
-            // Applies the filter
-            TestAudioFilter.applyFilter(audioFilter, args[0], args[1]);
+            EchoFilter echoFilter = new EchoFilter(22050, 0.6);
+            TestAudioFilter.applyFilter(echoFilter, args[0], args[1]);
+            }
         }
         catch(Exception e)
         {

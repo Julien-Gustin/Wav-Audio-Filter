@@ -12,7 +12,6 @@ public class GraphNode
   private int compositeOutput;
 
   private int inputs;
-  private int outputs;
 
   private int flag;
 
@@ -22,7 +21,7 @@ public class GraphNode
 
   private double[] currentOutput;
 
-  private int checked; //bool?
+  private boolean checked; //bool?
 
   private boolean reset;
 
@@ -34,8 +33,7 @@ public class GraphNode
   public GraphNode(Filter filter)
   {
     inputs = filter.nbInputs();
-    outputs = filter.nbOutputs();
-    reset = false;
+    // outputs = filter.nbOutputs();
 
     in = new GraphNode[inputs];
 
@@ -49,7 +47,9 @@ public class GraphNode
     linko = new int[filter.nbInputs()];
 
     currentOutput = null;
-    checked = 1;
+
+    checked = true;
+    reset = true;
 
   }
 
@@ -60,29 +60,30 @@ public class GraphNode
    * @param InOut    If InOut = 0, this is the composite Input
    *                 If InOut = 1, this is the composite Output
    * @param compositeNum is this in/output associated
+   * @param length number of outputs
    *
    */
   public GraphNode(int InOut, int compositeNum, int length)
   {
-    linko = new int[length]; // à changer
     reset = false;
+    checked = true;
+    currentOutput = null;
 
-    if(InOut == 0){
+    if(InOut == 0)
+    {
       this.compositeInput = compositeNum;
       this.compositeOutput = -1;
       inputs = 0;
-      outputs = 1;
       currentOutput = null;
-      checked = 1;
+      linko = null;
     }
-    else{
+    else
+    {
       this.compositeOutput = compositeNum;
       this.compositeInput = -1;
       inputs = 1;
-      outputs = 1;
       in = new GraphNode[1];
-      currentOutput = null;
-      checked = 1;
+      linko = new int[length];
     }
   }
   /**
@@ -93,17 +94,11 @@ public class GraphNode
   public int nbInputs(){return inputs;}
 
   /**
-   * Return the numbers of outputs associated of the node
-   *
-   * @return outputs which should be >= 0
-   */
-  public int nbOutputs(){return outputs;}
-
-  /**
    * Connect the input of the current node with another one
    *
-   * @param input
-   * @param node
+   * @param f1 node corresponding to the filter in input
+   * @param o1 the output of f1
+   * @param i2 the input
    */
   public void connectInOut(GraphNode f1, int o1, int i2)
   {
@@ -115,12 +110,13 @@ public class GraphNode
    * Get the value of the output TODO finish the "explication"
    *
    * @param input Is the input for the filter
+   * @param out The output needed
    *
    * @return currentOutput the output of the current filter needed for the next input
    */
   public double getOutput(double[] input, int out) throws FilterException
   {
-    checked = 0;
+    checked = false;
     reset = false;
 
     if(compositeInput != -1)
@@ -162,8 +158,9 @@ public class GraphNode
 
   public void check(double[] input) throws FilterException
   {
-    if(checked == 1) return;
-        checked = 1;
+    if(checked) return;
+    checked = true;
+
     for(int i = 0; i < inputs; i++)
       in[i].check(input);
 
@@ -176,8 +173,8 @@ public class GraphNode
 
   public void resetNode()
   {
-    // if(currentOutput == null){return;}
     if(reset) return;
+
     reset = true;
 
     currentOutput = null;

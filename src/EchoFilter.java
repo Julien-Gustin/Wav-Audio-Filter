@@ -1,46 +1,43 @@
 /*
  * INFO0062 - Object-Oriented Programming by Gustin Julien & Raze Felicien
- * Echo of filter created with a CompositeFilter class
+ * Echo filter created with a CompositeFilter class
  *
- * This short class is just a class creating a echo from the source file
+ * This short class refer to an echo class
  *
  * @author: Gustin Julien & Raze Felicien
  */
 import be.uliege.montefiore.oop.audio.*;
 
-public class EchoFilter
+public class EchoFilter extends CompositeFilter
 {
-    public static void main(String[] args)
+  public EchoFilter(int delayEcho, double gainEcho)
+  {
+    super(1, 1);
+
+    try
     {
-        try
-        {
-            // Creates the CompositeFilter object, with one input and one output
-            CompositeFilter audioFilter = new CompositeFilter(1, 1);
 
-            // Creates the basic blocks
-            Filter delay = new DelayFilter(22050);
-            Filter mult = new GainFilter(0.6);
-            Filter add = new AdditionFilter();
+        // Creates the basic blocks
+        Filter delay = new DelayFilter(delayEcho);
+        Filter mult = new GainFilter(gainEcho);
+        Filter add = new AdditionFilter();
 
-            // Adds them to the CompositeFilter
-            audioFilter.addBlock(mult);
-            audioFilter.addBlock(delay);
-            audioFilter.addBlock(add);
+        // Adds them to the CompositeFilter
+        addBlock(mult);
+        addBlock(delay);
+        addBlock(add);
 
-            // Connects the blocks together
-            audioFilter.connectInputToBlock(0, add, 0);
-            audioFilter.connectBlockToBlock(add, 0, delay, 0);
-            audioFilter.connectBlockToBlock(delay, 0, mult, 0);
-            audioFilter.connectBlockToBlock(mult, 0, add, 1);
+        // Connects the blocks together
+        connectInputToBlock(0, add, 0);
+        connectBlockToBlock(add, 0, delay, 0);
+        connectBlockToBlock(delay, 0, mult, 0);
+        connectBlockToBlock(mult, 0, add, 1);
 
-            audioFilter.connectBlockToOutput(add, 0, 0);
-
-            // Applies the filter
-            TestAudioFilter.applyFilter(audioFilter, "Source2.wav", "Echo.wav");
-        }
-        catch(Exception e)
-        {
-            System.err.println("Error: " + e.getMessage());
-        }
+        connectBlockToOutput(add, 0, 0);
     }
+    catch(Exception e)
+    {
+        System.err.println("Error: " + e.getMessage());
+    }
+  }
 }

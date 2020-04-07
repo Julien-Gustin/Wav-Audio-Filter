@@ -27,8 +27,7 @@ public class Demo
 
         else
         {
-
-        EchoFilter echoFilter = new EchoFilter(22050, 0.6);
+        EchoFilter echoFilter = new EchoFilter(22050, 0.4);
         TestAudioFilter.applyFilter(echoFilter, args[0], args[1]);
         }
       }

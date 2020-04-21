@@ -12,6 +12,7 @@ public class Artificial_Reverbator extends CompositeFilter
 {
     public Artificial_Reverbator() throws FilterException
     {
+      // call the compositefilter constructor
       super(1, 1);
         try
         {

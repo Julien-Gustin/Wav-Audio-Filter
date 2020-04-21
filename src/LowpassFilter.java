@@ -4,6 +4,7 @@ public class LowpassFilter extends CompositeFilter
 {
   public LowpassFilter(int delayDuration, double gain) throws FilterException
   {
+    // call the compositefilter constructor
     super(1, 1);
 
     Filter add = new AdditionFilter(),

@@ -16,7 +16,6 @@ public class EchoFilter extends CompositeFilter
 
     try
     {
-
         // Creates the basic blocks
         Filter delay = new DelayFilter(delayEcho);
         Filter mult = new GainFilter(gainEcho);

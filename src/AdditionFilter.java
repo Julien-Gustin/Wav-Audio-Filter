@@ -11,7 +11,7 @@ public class AdditionFilter implements Filter
   public double[] computeOneStep(double[] input) throws FilterException
   {
     if (input.length != 2)
-      throw new FilterException ("Wrong input length. ");
+      throw new FilterException ("Wrong input length in AdditionFilter.");
 
     double[] output = new double[1];
     output[0] = input[1]+input[0];

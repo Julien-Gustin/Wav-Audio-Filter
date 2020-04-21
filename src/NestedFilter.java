@@ -4,6 +4,7 @@ public class NestedFilter extends CompositeFilter
 {
   public NestedFilter(int delayNested, double gainNested, int delayPass, double gainPass) throws FilterException
   {
+    // call the compositefilter constructor
     super(1, 1);
 
     Filter allPass = new AllpassFilter(delayPass, gainPass),
@@ -34,8 +35,10 @@ public class NestedFilter extends CompositeFilter
     connectBlockToOutput(add2, 0, 0);
   }
 
+  //polymorphism, double allpass filter in the nested
   public NestedFilter(int delayNested, double gainNested, int delayPass1, double gainPass1, int delayPass2, double gainPass2) throws FilterException
   {
+    // call the compositefilter constructor
     super(1, 1);
 
 

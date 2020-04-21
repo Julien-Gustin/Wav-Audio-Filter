@@ -22,6 +22,7 @@ public class CompositeFilter implements Filter
   {
     nbInputs = inputs;
     nbOutputs = outputs;
+
     hash = new Hashtable<Filter, GraphNode>();
 
     this.outputs = new GraphNode[outputs];

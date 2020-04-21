@@ -26,6 +26,9 @@ public class GainFilter implements Filter
   public double[] computeOneStep(double[] input) throws FilterException
   {
 
+    if (input.length != 1)
+      throw new FilterException ("Wrong input length. ");
+
     double[] output = new double [1];
 
     output[0] = input[0]*gain;

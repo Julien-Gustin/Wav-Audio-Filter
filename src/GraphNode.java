@@ -1,5 +1,4 @@
 import be.uliege.montefiore.oop.audio.*;
-//TODO : remove what is in comment (like OUT) (useless)
 /**
 * Class allowing a graph representation of the composite filter.
 */
@@ -33,7 +32,6 @@ public class GraphNode
   public GraphNode(Filter filter)
   {
     inputs = filter.nbInputs();
-    // outputs = filter.nbOutputs();
 
     in = new GraphNode[inputs];
 

@@ -16,8 +16,10 @@ public class DelayFilter implements Filter
    *
    * @param delay should be > 0
    */
-  public DelayFilter(int delay)
+  public DelayFilter(int delay) throws FilterException
   {
+    if(delay <= 0){ throw new FilterException("Delay must be positive integer");}
+
     this.delay = delay;
     compt = delay;
     sQueue = new Queue();
@@ -35,9 +37,6 @@ public class DelayFilter implements Filter
   {
     if(needsInput == 1)
       throw new FilterException ("No previous input.");
-
-    if(delay <= 0)
-      throw new FilterException("Delay should be strictly positive. ");
 
     if (input.length != 1)
       throw new FilterException ("Wrong input length. ");

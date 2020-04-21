@@ -4,6 +4,7 @@ public class AllpassFilter extends CompositeFilter
 {
   public AllpassFilter(int delayDuration, double gain) throws FilterException
   {
+    // call the compositefilter constructor
     super(1, 1);
 
     Filter add1 = new AdditionFilter(),

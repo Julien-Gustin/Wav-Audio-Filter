@@ -34,46 +34,72 @@ public class Artificial_Reverbator extends CompositeFilter
                  add3 = new AdditionFilter(),
                  lowPass = new LowpassFilter((int)(0.002*SAMPLE), 0.7133);
 
-         addBlock(delay1);
-         addBlock(delay2);
-         addBlock(delay3);
-         addBlock(delay4);
-         addBlock(gain1);
-         addBlock(gain2);
-         addBlock(gain3);
-         addBlock(gain4);
-         addBlock(nested1);
-         addBlock(nested2);
-         addBlock(add1);
-         addBlock(add2);
-         addBlock(add3);
-         addBlock(lowPass);
-         addBlock(Dpass);
+          CompositeFilter seq1 = new CompositeFilter(1, 1);
+          CompositeFilter seq2 = new CompositeFilter(1, 1);
+          CompositeFilter seq3 = new CompositeFilter(1, 1);
 
-         //Connect input
-         connectInputToBlock(0, add1, 0);
+          seq1.addBlock(Dpass);
 
-         //Connect Block together
-         connectBlockToBlock(add1, 0, Dpass, 0);
-         connectBlockToBlock(Dpass, 0, delay1, 0);
-         connectBlockToBlock(delay1, 0, gain1, 0);
-         connectBlockToBlock(delay1, 0, delay2, 0);
-         connectBlockToBlock(delay2, 0, nested1, 0);
-         connectBlockToBlock(nested1, 0, delay3, 0);
-         connectBlockToBlock(delay3, 0, gain2, 0);
-         connectBlockToBlock(gain2, 0, add2, 0);
-         connectBlockToBlock(gain1, 0, add2, 1);
-         connectBlockToBlock(add2, 0, add3, 0);
-         connectBlockToBlock(delay3, 0, delay4, 0);
-         connectBlockToBlock(delay4, 0, nested2, 0);
-         connectBlockToBlock(nested2, 0, gain3, 0);
-         connectBlockToBlock(gain3, 0, add3, 1);
-         connectBlockToBlock(nested2, 0, lowPass, 0);
-         connectBlockToBlock(lowPass, 0, gain4, 0);
-         connectBlockToBlock(gain4, 0, add1, 1);
+          seq2.addBlock(delay2);
+          seq2.addBlock(delay3);
+          seq2.addBlock(nested1);
 
-         //Connect Output
-         connectBlockToOutput(add3, 0, 0);
+          seq3.addBlock(delay4);
+          seq3.addBlock(nested2);
+
+          this.addBlock(delay1);
+          this.addBlock(gain1);
+          this.addBlock(gain2);
+          this.addBlock(gain3);
+          this.addBlock(gain4);
+          this.addBlock(add1);
+          this.addBlock(add2);
+          this.addBlock(add3);
+          this.addBlock(lowPass);
+          this.addBlock(seq1);
+          this.addBlock(seq2);
+          this.addBlock(seq3);
+
+          //Sequence one
+          seq1.connectInputToBlock(0, Dpass, 0);
+          seq1.connectBlockToOutput(Dpass, 0, 0);
+
+          //Sequence two
+          seq2.connectInputToBlock(0, delay2, 0);
+          seq2.connectBlockToBlock(delay2, 0, nested1, 0);
+          seq2.connectBlockToBlock(nested1, 0, delay3, 0);
+          seq2.connectBlockToOutput(delay3, 0, 0);
+
+          //Sequence three
+          seq3.connectInputToBlock(0, delay4, 0);
+          seq3.connectBlockToBlock(delay4, 0, nested2, 0);
+          seq3.connectBlockToOutput(nested2, 0, 0);
+
+
+          //Combinaison of sequence => Artificial Reverbator
+          this.connectInputToBlock(0, add1, 0);
+
+          //Connect Block together
+          this.connectBlockToBlock(add1, 0, seq1, 0);
+          this.connectBlockToBlock(seq1, 0, delay1, 0); // the delay wich appear explicitely
+
+          this.connectBlockToBlock(delay1, 0, gain1, 0);
+          this.connectBlockToBlock(delay1, 0, seq2, 0);
+
+          this.connectBlockToBlock(seq2, 0, gain2, 0);
+          this.connectBlockToBlock(gain2, 0, add2, 0);
+          this.connectBlockToBlock(gain1, 0, add2, 1);
+          this.connectBlockToBlock(add2, 0, add3, 0);
+          this.connectBlockToBlock(seq2, 0, seq3, 0);
+
+          this.connectBlockToBlock(seq3, 0, gain3, 0);
+          this.connectBlockToBlock(gain3, 0, add3, 1);
+          this.connectBlockToBlock(seq3, 0, lowPass, 0);
+          this.connectBlockToBlock(lowPass, 0, gain4, 0);
+          this.connectBlockToBlock(gain4, 0, add1, 1);
+
+          //Connect Output
+          this.connectBlockToOutput(add3, 0, 0);
         }
         catch(Exception e)
         {

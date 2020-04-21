@@ -119,11 +119,7 @@ public class GraphNode
 
     if(currentOutput != null && flag == 0)
     {
-      if(filter instanceof CompositeFilter)
         return currentOutput[out];
-
-      else
-        return currentOutput[0];
     }
 
     if(filter instanceof DelayFilter && flag == 0)

@@ -68,6 +68,7 @@ public class GraphNode
     reset = false;
     checked = true;
     currentOutput = null;
+    flag = 0;
 
     if(InOut == 0)
     {
@@ -107,7 +108,6 @@ public class GraphNode
   }
 
   /**
-   * Get the value of the output TODO finish the "explication"
    *
    * @param input Is the input for the filter
    * @param out The output needed
@@ -119,12 +119,6 @@ public class GraphNode
     checked = false;
     reset = false;
 
-    if(compositeInput != -1)
-    {
-      currentOutput = input;
-      return currentOutput[0];
-    }
-
     if(currentOutput != null && flag == 0)
     {
       if(filter instanceof CompositeFilter)
@@ -132,7 +126,7 @@ public class GraphNode
 
       else
         return currentOutput[0];
-      }
+    }
 
     if(filter instanceof DelayFilter && flag == 0)
     {
@@ -143,7 +137,8 @@ public class GraphNode
     }
 
     double[] inputArray = new double[inputs];
-    for(int i = 0; i < inputs; i++){
+    for(int i = 0; i < inputs; i++)
+    {
       if(in[i].compositeInput != -1)
         inputArray[i] = input[linko[i]];
 
@@ -180,9 +175,7 @@ public class GraphNode
   public void resetNode()
   {
     if(reset) return;
-
     reset = true;
-
     currentOutput = null;
 
     for(int i = 0; i < inputs; i++)

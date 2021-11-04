@@ -1,15 +1,3 @@
-# Reverbator has been built
-## Files used :
-
-- AllpassFilter.java
-- Artificial_Reverbator.java
-- LowpassFilter.java
-- TwoAllpassFilter.java
-- NestedFilter.java
-- And obviously basic Filter and CompositeFilter.java
-
-# Using audio.jar
-
 ## Compilation
 
 ```sh

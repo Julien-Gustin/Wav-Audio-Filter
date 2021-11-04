@@ -1,3 +1,4 @@
+# A *simple* software to apply echo and reverb into a .wav file
 ## Compilation
 
 ```sh
